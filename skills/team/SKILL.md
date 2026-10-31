@@ -44,6 +44,24 @@ The `swarm` compatibility alias was removed in #1131.
 # Mixed: Codex for backend analysis, Gemini/Antigravity for frontend (delegate per-task with /oh-my-claudecode:ask)
 ```
 
+## Worker Provider Selection (do this first)
+
+Resolve the worker provider before any other step:
+
+1. `N:agent-type` names a CLI provider (`codex`, `gemini`, `antigravity`, `grok`, `cursor`, `opencode`): that provider.
+2. Otherwise read `team.ops.defaultAgentType` from `~/.config/claude-omc/config.jsonc` and `.claude/omc.jsonc` (project wins). Any value other than `claude` or unset: that provider.
+3. Otherwise `claude`: continue with the implicit Claude team below.
+
+For a CLI provider, do not spawn Claude teammates. Run the CLI launcher with the user's arguments unchanged and monitor it:
+
+```bash
+omc team <N[:role]> "<task>"
+omc team status <team-name>
+omc team shutdown <team-name>
+```
+
+`omc team` resolves the provider and model per role from `team.roleRouting` and `externalModels.defaults`. Report the team name, the workers' provider and model, and the result from `omc team status`. The Claude-only sections below do not apply to this path.
+
 ## Architecture
 
 ```
