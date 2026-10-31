@@ -24,7 +24,8 @@ export type AutopilotTeamAgentType =
   | "gemini"
   | "grok"
   | "cursor"
-  | "antigravity";
+  | "antigravity"
+  | "opencode";
 
 /** Built-in stages admitted by version 1 named autopilot workflows. */
 export type AutopilotWorkflowStage = "ralplan" | "execution" | "ralph" | "qa";
@@ -365,6 +366,7 @@ export interface ExternalModelsDefaults {
   grokModel?: string;
   antigravityModel?: string;
   cursorModel?: string;
+  opencodeModel?: string;
 }
 
 /**
@@ -486,7 +488,7 @@ export const CANONICAL_TEAM_ROLES = [
 export type CanonicalTeamRole = typeof CANONICAL_TEAM_ROLES[number];
 
 /** Provider for /team role routing. */
-export type TeamRoleProvider = 'claude' | 'codex' | 'gemini' | 'grok' | 'cursor' | 'antigravity';
+export type TeamRoleProvider = 'claude' | 'codex' | 'gemini' | 'grok' | 'cursor' | 'antigravity' | 'opencode';
 
 /** Tier name accepted in role-assignment `model` field. */
 export type TeamRoleTier = 'HIGH' | 'MEDIUM' | 'LOW';

@@ -169,6 +169,13 @@ function agentTypeGuidance(agentType: CliAgentType, reviewerRole = false): strin
         '- Keep commit-sized changes scoped to assigned files only; no broad refactors.',
         `- CRITICAL: You MUST run \`${claimTaskCommand}\` before starting work and \`${transitionTaskStatusCommand}\` when done. Do not exit without transitioning the task status.`,
       ].join('\n');
+    case 'opencode':
+      return [
+        '### Agent-Type Guidance (opencode)',
+        `- Prefer short, explicit \`${teamApiCommand} ... --json\` commands and parse outputs before next step.`,
+        '- If a command fails, report the exact stderr to leader-fixed before retrying.',
+        `- You MUST run \`${claimTaskCommand}\` before starting work and \`${transitionTaskStatusCommand}\` when done.`,
+      ].join('\n');
     case 'claude':
     default:
       return [

@@ -7,7 +7,7 @@ import { isExternalLLMDisabled } from '../lib/security-config.js';
 import type { WorkerLaunchDescriptor } from './types.js';
 import type { ExternalModelsDefaults } from '../shared/types.js';
 
-export type CliAgentType = 'claude' | 'codex' | 'gemini' | 'cursor' | 'grok' | 'antigravity';
+export type CliAgentType = 'claude' | 'codex' | 'gemini' | 'cursor' | 'grok' | 'antigravity' | 'opencode';
 
 export interface CliAgentContract {
   agentType: CliAgentType;
@@ -292,6 +292,20 @@ const CONTRACTS: Record<CliAgentType, CliAgentContract> = {
       if (reasoningEffort) {
         args.push('--effort', reasoningEffort);
       }
+      return [...args, ...extraFlags];
+    },
+    parseOutput(rawOutput: string): string {
+      return rawOutput.trim();
+    },
+  },
+  opencode: {
+    agentType: 'opencode',
+    binary: 'opencode',
+    installInstructions: 'Install opencode: https://opencode.ai, then verify with `opencode --version`.',
+    supportsPromptMode: true,
+    buildLaunchArgs(model?: string, reasoningEffort?: string, extraFlags: string[] = []): string[] {
+      const args = ['run', '--auto'];
+      if (model) args.push('--model', model);
       return [...args, ...extraFlags];
     },
     parseOutput(rawOutput: string): string {
@@ -624,6 +638,7 @@ export function resolveDefaultWorkerModel(
     antigravity: 'antigravityModel',
     grok: 'grokModel',
     cursor: 'cursorModel',
+    opencode: 'opencodeModel',
   };
   const configuredValue = defaults?.[providerConfigKeys[agentType]];
   const configured = typeof configuredValue === 'string' ? configuredValue.trim() : undefined;
@@ -645,7 +660,7 @@ export function resolveDefaultWorkerModel(
 export function normalizeExternalModelsDefaults(defaults?: ExternalModelsDefaults): ExternalModelsDefaults | undefined {
   if (!defaults || typeof defaults !== 'object') return undefined;
   const normalized: ExternalModelsDefaults = {};
-  for (const key of ['codexModel', 'geminiModel', 'grokModel', 'antigravityModel', 'cursorModel'] as const) {
+  for (const key of ['codexModel', 'geminiModel', 'grokModel', 'antigravityModel', 'cursorModel', 'opencodeModel'] as const) {
     const value = defaults[key];
     if (typeof value === 'string' && value.trim()) normalized[key] = value.trim();
   }
@@ -663,7 +678,7 @@ export function resolveExternalModelsDefaults(
   const normalized = normalizeExternalModelsDefaults(defaults) ?? {};
   for (const [provider, key] of [
     ['CODEX', 'codexModel'], ['GEMINI', 'geminiModel'], ['GROK', 'grokModel'],
-    ['CURSOR', 'cursorModel'], ['ANTIGRAVITY', 'antigravityModel'],
+    ['CURSOR', 'cursorModel'], ['ANTIGRAVITY', 'antigravityModel'], ['OPENCODE', 'opencodeModel'],
   ] as const) {
     if (normalized[key]) continue;
     const value = [env[`OMC_EXTERNAL_MODELS_DEFAULT_${provider}_MODEL`], env[`OMC_${provider}_DEFAULT_MODEL`]]

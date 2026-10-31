@@ -382,7 +382,7 @@ describe('cli-detection', () => {
   it('preserves the legacy detectAllClis keys', () => {
     mockSpawnSync.mockReturnValue(spawnResult({ status: 1 }));
 
-    expect(Object.keys(detectAllClis())).toEqual(['claude', 'codex', 'gemini', 'cursor', 'grok', 'antigravity']);
+    expect(Object.keys(detectAllClis())).toEqual(['claude', 'codex', 'gemini', 'cursor', 'grok', 'antigravity', 'opencode']);
     expect(mockSpawnSync).toHaveBeenNthCalledWith(1, 'which', ['claude'], expect.objectContaining({ shell: false }));
     expect(mockSpawnSync).toHaveBeenNthCalledWith(6, 'which', ['agy'], expect.objectContaining({ shell: false }));
   });

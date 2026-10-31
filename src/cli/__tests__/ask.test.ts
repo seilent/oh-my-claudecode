@@ -403,6 +403,7 @@ describe('parseAskArgs', () => {
     expect(parseAskArgs(['grok', 'review', 'this'])).toEqual({ provider: 'grok', prompt: 'review this' });
     expect(parseAskArgs(['grok', '-p', 'brainstorm'])).toEqual({ provider: 'grok', prompt: 'brainstorm' });
     expect(parseAskArgs(['cursor', 'review', 'this'])).toEqual({ provider: 'cursor', prompt: 'review this' });
+    expect(parseAskArgs(['opencode', 'review', 'this'])).toEqual({ provider: 'opencode', prompt: 'review this' });
     expect(parseAskArgs(['cursor', '-p', 'brainstorm'])).toEqual({ provider: 'cursor', prompt: 'brainstorm' });
   });
 

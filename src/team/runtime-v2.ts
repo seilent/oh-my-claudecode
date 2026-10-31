@@ -1210,6 +1210,7 @@ const WORKER_STARTUP_EVIDENCE_POLICIES: Readonly<Record<CliAgentType, WorkerStar
   cursor: { initialBudgetMs: 30_000, finalRecheckBudgetMs: 1_000, resubmitAttempts: 0, resubmitBudgetMs: 0, engagedPaneRecheckBudgetMs: 30_000 },
   grok: { initialBudgetMs: 30_000, finalRecheckBudgetMs: 1_000, resubmitAttempts: 0, resubmitBudgetMs: 0, engagedPaneRecheckBudgetMs: 0 },
   antigravity: { initialBudgetMs: 30_000, finalRecheckBudgetMs: 1_000, resubmitAttempts: 0, resubmitBudgetMs: 0, engagedPaneRecheckBudgetMs: 0 },
+  opencode: { initialBudgetMs: 30_000, finalRecheckBudgetMs: 1_000, resubmitAttempts: 0, resubmitBudgetMs: 0, engagedPaneRecheckBudgetMs: 0 },
 };
 
 const ENGAGED_PANE_RECHECK_TIMEOUT_ENV = 'OMC_TEAM_ENGAGED_PANE_RECHECK_MS';

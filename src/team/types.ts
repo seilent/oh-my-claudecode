@@ -159,7 +159,7 @@ export interface McpWorkerMember {
 export interface HeartbeatData {
   workerName: string;
   teamName: string;
-  provider: 'codex' | 'gemini' | 'claude' | 'cursor' | 'grok' | 'antigravity';
+  provider: 'codex' | 'gemini' | 'claude' | 'cursor' | 'grok' | 'antigravity' | 'opencode';
   pid: number;
   lastPollAt: string;       // ISO timestamp of last poll cycle
   currentTaskId?: string;   // task being executed, if any
@@ -194,7 +194,7 @@ export interface TaskFailureSidecar {
 }
 
 /** Worker backend type */
-export type WorkerBackend = 'claude-native' | 'mcp-codex' | 'mcp-gemini' | 'tmux-claude' | 'tmux-codex' | 'tmux-gemini' | 'tmux-cursor' | 'tmux-grok' | 'tmux-antigravity';
+export type WorkerBackend = 'claude-native' | 'mcp-codex' | 'mcp-gemini' | 'tmux-claude' | 'tmux-codex' | 'tmux-gemini' | 'tmux-cursor' | 'tmux-grok' | 'tmux-antigravity' | 'tmux-opencode';
 
 /** Worker capability tag */
 export type WorkerCapability =
@@ -437,7 +437,7 @@ export interface TeamRecoveryAttempt {
 
 export interface WorkerLaunchDescriptor {
   schema_version: 1;
-  provider: 'claude' | 'codex' | 'gemini' | 'cursor' | 'grok' | 'antigravity';
+  provider: 'claude' | 'codex' | 'gemini' | 'cursor' | 'grok' | 'antigravity' | 'opencode';
   model: string | null;
   binary: string;
   args: string[];
@@ -530,7 +530,7 @@ export interface WorkerInfo {
   name: string;
   index: number;
   role: string;
-  worker_cli?: 'codex' | 'claude' | 'gemini' | 'cursor' | 'grok' | 'antigravity';
+  worker_cli?: 'codex' | 'claude' | 'gemini' | 'cursor' | 'grok' | 'antigravity' | 'opencode';
   assigned_tasks: string[];
   pid?: number;
   pane_id?: string;

@@ -138,6 +138,7 @@ For configurable skill reviews in deep-interview, ralplan, and omc-review, see [
 | `OMC_GEMINI_DEFAULT_MODEL`       | _(provider default)_ | Default model for Gemini CLI workers                                                                                                                                                                                                                                    |
 | `OMC_ANTIGRAVITY_DEFAULT_MODEL`  | _(provider default)_ | Default model for Antigravity CLI (`agy`) workers                                                                                                                                                                                                                       |
 | `OMC_GROK_DEFAULT_MODEL`         | _(provider default)_ | Default model for Grok Build CLI workers                                                                                                                                                                                                                                |
+| `OMC_OPENCODE_DEFAULT_MODEL`     | _(provider default)_ | Default model for opencode CLI workers (`provider/model`, ids from `opencode models`) |
 | `OMC_LSP_TIMEOUT_MS`       | `15000`              | LSP timeout in positive whole milliseconds (maximum `2147483647`; invalid or out-of-range values use the default). Increase for large repos or slow language servers                                                                                                                                                                                            |
 | `OMC_MIGRATE_LEGACY_STATE` | _(unset)_            | Set to `1` to enable one-shot legacy→session-scoped state migration on next read. See [Legacy state migration](#legacy-state-migration-omc_migrate_legacy_state) below.                                                                                                      |
 | `OMC_DISABLE_MULTIREPO`    | _(unset)_            | Set to `1` to disable workspace-marker resolution and fall back to git-root + cwd resolution order. `OMC_STATE_DIR` is still honoured. See [Rollback / disable multi-repo](#rollback--disable-multi-repo-omc_disable_multirepo) below.                                       |
@@ -615,7 +616,7 @@ omc ask claude --agent-prompt executor --prompt "create an implementation plan"
 - Artifacts: `.omc/artifacts/ask/{provider}-{slug}-{timestamp}.md`
 - Canonical env vars: `OMC_ASK_ADVISOR_SCRIPT`, `OMC_ASK_ORIGINAL_TASK`
 - Phase-1 aliases (deprecated warning): `OMX_ASK_ADVISOR_SCRIPT`, `OMX_ASK_ORIGINAL_TASK`
-- Skill entrypoint: `/oh-my-claudecode:ask <claude|codex|gemini|antigravity|grok|cursor|muse> <prompt>` routes to this command
+- Skill entrypoint: `/oh-my-claudecode:ask <claude|codex|gemini|antigravity|grok|cursor|opencode|muse> <prompt>` routes to this command
 - Muse and Grok require CLI versions supporting `--prompt-file`; role prompts are passed through a private temporary file. Muse disables approval prompts while preserving its configured sandbox behavior.
 
 ### `omc team` (CLI runtime surface)
@@ -726,7 +727,7 @@ omc graph run ./my-graph.json --approval-mode remote --checkpoint
 Use OMC's terminal and library surfaces in non-interactive environments:
 
 - Run CLI commands that have deterministic exit codes, for example `omc setup`, `omc ask ...`, `omc session search ... --json`, or repo-owned verification scripts such as `npm run sync-metadata:verify`.
-- Provide authentication through runner environment variables (`ANTHROPIC_API_KEY`) or pre-authenticated provider CLIs for `codex`, `gemini`, `antigravity`, `grok`, or `cursor` when using `omc ask` / `omc team`.
+- Provide authentication through runner environment variables (`ANTHROPIC_API_KEY`) or pre-authenticated provider CLIs for `codex`, `gemini`, `antigravity`, `grok`, `cursor`, or `opencode` when using `omc ask` / `omc team`.
 - For `omc ask muse`, install and authenticate the Muse CLI before running automation.
 - Keep state explicit for ephemeral runners by setting `OMC_STATE_DIR` when state must survive worktree deletion or checkout replacement.
 - Avoid interactive slash skills (`/oh-my-claudecode:autopilot`, `/oh-my-claudecode:ralph`, `/oh-my-claudecode:execute`, `/oh-my-claudecode:deep-interview`, `/oh-my-claudecode:team`) in CI jobs; they require an active Claude Code session and user-visible conversation loop.
@@ -977,7 +978,7 @@ Marketplace/plugin installs compact the native plugin `skills/*/SKILL.md` files 
 | `ai-slop-cleaner`         | Anti-slop cleanup workflow with optional reviewer-only `--review` pass        | `/oh-my-claudecode:ai-slop-cleaner`         |
 | `agent-doc-discipline`    | Writing-time discipline for agent-facing documents: checkable rules with a why, steps first, one meaning one home | `/oh-my-claudecode:agent-doc-discipline` |
 | `architecture-survey`     | Shipyard survey: report ranked architecture-deepening candidates with evidence, never edit code | `/oh-my-claudecode:architecture-survey`     |
-| `ask`                     | Ask Claude, Codex, Gemini, Antigravity, Grok, or Cursor via local CLI          | `/oh-my-claudecode:ask`                     |
+| `ask`                     | Ask Claude, Codex, Gemini, Antigravity, Grok, Cursor, or opencode via local CLI        | `/oh-my-claudecode:ask`                     |
 | `ask-navigator`           | Shipyard navigator: chart foggy efforts into decision-ticket maps, hand off to launch | `/oh-my-claudecode:ask-navigator`    |
 | `autopilot`               | Full autonomous execution from idea to working code                            | `/oh-my-claudecode:autopilot`               |
 | `autoresearch`            | Stateful evaluator-driven improvement loop                                     | `/oh-my-claudecode:autoresearch`            |
@@ -1035,7 +1036,7 @@ Most installed skills are exposed as `/oh-my-claudecode:<registered-name>`. The 
 | -------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | `/oh-my-claudecode:ai-slop-cleaner <target>`             | Run the anti-slop cleanup workflow (`--review` for reviewer-only pass)                        |
 | `/oh-my-claudecode:agent-doc-discipline`                 | Apply the writing-time discipline for agent-facing documents                                   |
-| `/oh-my-claudecode:ask <claude\|codex\|gemini\|antigravity\|grok\|cursor\|muse> <prompt>` | Route a prompt through the selected advisor CLI and capture an ask artifact                   |
+| `/oh-my-claudecode:ask <claude\|codex\|gemini\|antigravity\|grok\|cursor\|opencode\|muse> <prompt>` | Route a prompt through the selected advisor CLI and capture an ask artifact                   |
 | `/oh-my-claudecode:architecture-survey [area]`           | Survey the repo for architecture-deepening candidates with evidence; reports only, never edits  |
 | `/oh-my-claudecode:ask-navigator <idea\|map>`            | Chart a foggy effort into a map of decision tickets (or work the open map), then hand off to launch |
 | `/oh-my-claudecode:autopilot <task>`                     | Full autonomous execution                                                                     |

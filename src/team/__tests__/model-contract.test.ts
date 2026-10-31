@@ -173,6 +173,12 @@ describe('model-contract', () => {
       expect(c.binary).toBe('grok');
       expect(c.supportsPromptMode).toBe(true);
     });
+    it('returns contract for opencode', () => {
+      const c = getContract('opencode');
+      expect(c.agentType).toBe('opencode');
+      expect(c.binary).toBe('opencode');
+      expect(c.supportsPromptMode).toBe(true);
+    });
     it('returns contract for antigravity', () => {
       const c = getContract('antigravity');
       expect(c.agentType).toBe('antigravity');
@@ -392,6 +398,14 @@ describe('model-contract', () => {
 
       const withModel = buildLaunchArgs('grok', { teamName: 't', workerName: 'w', cwd: '/tmp', model: 'grok-4-fast' });
       expect(withModel).toEqual(['--always-approve', '--model', 'grok-4-fast']);
+    });
+    it('opencode runs headless with --auto and appends --model <m> when given', () => {
+      const noModel = buildLaunchArgs('opencode', { teamName: 't', workerName: 'w', cwd: '/tmp' });
+      expect(noModel).toEqual(['run', '--auto']);
+
+      const withModel = buildLaunchArgs('opencode', { teamName: 't', workerName: 'w', cwd: '/tmp', model: 'opencode/big-pickle' });
+      expect(withModel).toEqual(['run', '--auto', '--model', 'opencode/big-pickle']);
+      expect(getPromptModeArgs('opencode', 'do it')).toEqual(['do it']);
     });
     it('cursor leads with --force --trust and appends --model <m> when given (issue #3880)', () => {
       const noModel = buildLaunchArgs('cursor', { teamName: 't', workerName: 'w', cwd: '/tmp' });

@@ -10,6 +10,7 @@ const PROVIDER_IDLE_PROMPT_LINES: Readonly<Record<CliAgentType, RegExp>> = {
   cursor: CURSOR_IDLE_PROMPT_LINE,
   grok: LEGACY_IDLE_PROMPT_LINE,
   antigravity: LEGACY_IDLE_PROMPT_LINE,
+  opencode: LEGACY_IDLE_PROMPT_LINE,
 };
 
 export function paneLineLooksLikeIdlePrompt(
