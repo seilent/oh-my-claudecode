@@ -371,7 +371,7 @@ export async function assertTeamSpawnAllowed(cwd: string, env: NodeJS.ProcessEnv
 /** Regex for a single worker spec segment: N[:type[:role]] */
 const SINGLE_SPEC_RE = /^(\d+)(?::([a-z][a-z0-9-]*)(?::([a-z][a-z0-9-]*))?)?$/i;
 
-function normalizeWorkerSpecSegment(match: RegExpMatchArray): NormalizedWorkerSpecSegment {
+function normalizeWorkerSpecSegment(match: RegExpMatchArray, defaultAgentType: string = DEFAULT_TEAM_CLI_AGENT_TYPE): NormalizedWorkerSpecSegment {
   const count = Number.parseInt(match[1], 10);
   if (!Number.isFinite(count) || count < MIN_WORKER_COUNT || count > MAX_WORKER_COUNT) {
     throw new Error(`Invalid worker count "${match[1]}". Expected ${MIN_WORKER_COUNT}-${MAX_WORKER_COUNT}.`);
@@ -380,7 +380,7 @@ function normalizeWorkerSpecSegment(match: RegExpMatchArray): NormalizedWorkerSp
   const token = match[2]?.toLowerCase();
   const explicitRole = match[3]?.toLowerCase();
   if (!token) {
-    return { count, agentType: 'claude' };
+    return { count, agentType: defaultAgentType };
   }
 
   if (explicitRole) {
@@ -398,7 +398,7 @@ function normalizeWorkerSpecSegment(match: RegExpMatchArray): NormalizedWorkerSp
     return { count, agentType: token };
   }
 
-  return { count, agentType: 'claude', role: token };
+  return { count, agentType: defaultAgentType, role: token };
 }
 
 /** @internal Exported for testing */
@@ -453,7 +453,7 @@ export function parseTeamArgs(tokens: string[], defaultAgentType: string = 'clau
     for (const seg of segments) {
       const m = seg.match(SINGLE_SPEC_RE);
       if (!m) { allValid = false; break; }
-      parsedSegments.push(normalizeWorkerSpecSegment(m));
+      parsedSegments.push(normalizeWorkerSpecSegment(m, normalizedDefaultAgentType));
     }
 
     if (allValid && parsedSegments.length > 0) {
@@ -482,7 +482,7 @@ export function parseTeamArgs(tokens: string[], defaultAgentType: string = 'clau
   if (!specMatched) {
     const match = first.match(SINGLE_SPEC_RE);
     if (match) {
-      const normalized = normalizeWorkerSpecSegment(match);
+      const normalized = normalizeWorkerSpecSegment(match, normalizedDefaultAgentType);
       workerCount = normalized.count;
       role = normalized.role;
       agentTypes = Array.from({ length: workerCount }, () => normalized.agentType);

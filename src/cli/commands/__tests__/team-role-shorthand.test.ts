@@ -1,4 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { mkdtempSync, rmSync } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
 
 const runtimeV2Mocks = vi.hoisted(() => ({
   isRuntimeV2Enabled: vi.fn(() => true),
@@ -44,8 +47,12 @@ describe('teamCommand role-only shorthand', () => {
   const originalCwd = process.cwd();
   let logSpy: ReturnType<typeof vi.spyOn>;
   let errorSpy: ReturnType<typeof vi.spyOn>;
+  let configHome: string;
+  const originalXdgConfigHome = process.env.XDG_CONFIG_HOME;
 
   beforeEach(() => {
+    configHome = mkdtempSync(join(tmpdir(), 'omc-team-shorthand-config-'));
+    process.env.XDG_CONFIG_HOME = configHome;
     runtimeV2Mocks.isRuntimeV2Enabled.mockReturnValue(true);
     runtimeV2Mocks.findActiveTeamsV2.mockResolvedValue([]);
     runtimeV2Mocks.startTeamV2.mockResolvedValue({
@@ -69,6 +76,9 @@ describe('teamCommand role-only shorthand', () => {
 
   afterEach(() => {
     process.chdir(originalCwd);
+    if (originalXdgConfigHome === undefined) delete process.env.XDG_CONFIG_HOME;
+    else process.env.XDG_CONFIG_HOME = originalXdgConfigHome;
+    rmSync(configHome, { recursive: true, force: true });
     logSpy.mockRestore();
     errorSpy.mockRestore();
     vi.clearAllMocks();

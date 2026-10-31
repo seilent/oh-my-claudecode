@@ -362,6 +362,18 @@ describe('parseTeamArgs explicit task syntax', () => {
     expect(parsed.workerCount).toBe(3);
     expect(parsed.explicitWorkerSpec).toBe(false);
   });
+
+  it('uses the configured default agent type for a bare count and a role-only spec', () => {
+    const bare = parseTeamArgs(['2', 'fix the login bug'], 'opencode');
+    expect(bare.agentTypes).toEqual(['opencode', 'opencode']);
+
+    const roleOnly = parseTeamArgs(['2:executor', 'fix the login bug'], 'opencode');
+    expect(roleOnly.agentTypes).toEqual(['opencode', 'opencode']);
+    expect(roleOnly.role).toBe('executor');
+
+    const explicit = parseTeamArgs(['1:codex', 'review auth'], 'opencode');
+    expect(explicit.agentTypes).toEqual(['codex']);
+  });
 });
 
 describe('parseTeamArgs comma-separated multi-type specs', () => {
