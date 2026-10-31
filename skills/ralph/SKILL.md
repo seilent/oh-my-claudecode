@@ -221,9 +221,9 @@ Why good: Generic criteria replaced with specific, testable criteria.
 Correct parallel delegation:
 ```
 
-Task(subagent_type="oh-my-claudecode:executor", model="haiku", prompt="Add type export for UserConfig")
-Task(subagent_type="oh-my-claudecode:executor", model="sonnet", prompt="Implement the caching layer for API responses")
-Task(subagent_type="oh-my-claudecode:executor", model="sonnet", prompt="Refactor auth module to support OAuth2 flow")
+Task(subagent_type="opencode-executor", prompt="Add type export for UserConfig")
+Task(subagent_type="opencode-executor", prompt="Implement the caching layer for API responses")
+Task(subagent_type="opencode-executor", prompt="Refactor auth module to support OAuth2 flow")
 
 ```
 Why good: Three independent tasks fired simultaneously at appropriate tiers.
@@ -254,9 +254,9 @@ Why bad: Uses "should" and "look good" -- no fresh evidence, no story-by-story v
 Sequential execution of independent tasks:
 ```
 
-Task(executor, "Add type export") → wait →
-Task(executor, "Implement caching") → wait →
-Task(executor, "Refactor auth")
+Task(opencode-executor, "Add type export") → wait →
+Task(opencode-executor, "Implement caching") → wait →
+Task(opencode-executor, "Refactor auth")
 
 ```
 Why bad: These are independent tasks that should run in parallel, not sequentially.

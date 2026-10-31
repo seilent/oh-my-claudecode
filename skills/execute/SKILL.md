@@ -23,7 +23,7 @@ Take a task from agreed intent to working code, with evidence that it works.
 ## Scale
 Match the machinery to the task:
 - **Single unit** — implement directly, verify, done.
-- **Several independent units** — delegate to `executor` agents in parallel.
+- **Several independent units**: delegate to `opencode-executor` agents in parallel (`executor` when `opencode-executor` is not installed).
 - **Long-running or unbounded** — keep a durable task list and continue until the list is empty.
 - **Needs coordinated parallel workers** — use `team`.
 

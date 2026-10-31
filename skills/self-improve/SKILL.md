@@ -72,7 +72,7 @@ All augmentations delivered via Task description context at spawn time. No modif
 | Planning | Hypothesis → structured plan | oh-my-claudecode:planner | sonnet |
 | Architecture Review | 6-point plan review | oh-my-claudecode:architect | sonnet |
 | Critic Review | Harness rule enforcement | oh-my-claudecode:critic | sonnet |
-| Execution | Implement plan + run benchmark | oh-my-claudecode:executor | sonnet |
+| Execution | Implement plan + run benchmark | opencode-executor (oh-my-claudecode:executor if not installed) | haiku wrapper |
 | Git Operations | Atomic merge/tag/PR | oh-my-claudecode:git-master | sonnet |
 | Goal Setup | Interactive interview | (directly in this skill) | N/A |
 | Benchmark Setup | Create + validate benchmark | custom agent | sonnet |
@@ -243,7 +243,7 @@ If ALL plans rejected, log and skip to Step 9.
 
 ### Step 7 — Execute
 
-For each approved plan, spawn `oh-my-claudecode:executor`(model=sonnet) in parallel.
+For each approved plan, spawn `opencode-executor` (`oh-my-claudecode:executor` with model=sonnet if it is not installed) in parallel.
 
 **Before spawning**, create worktree:
 ```

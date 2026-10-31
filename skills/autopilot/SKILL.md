@@ -96,9 +96,7 @@ V1 does not support `stageModels`, model routing, provider or role selection; in
    - Output: `.omc/plans/autopilot-impl.md`
 
 3. **Phase 2 - Execution**: Implement the plan using executor agents with Ralph persistence when needed
-   - Executor (Haiku): Simple tasks
-   - Executor (Sonnet): Standard tasks
-   - Executor (Opus): Complex tasks
+   - Use the `opencode-executor` agent for every implementation task when it is installed; otherwise `oh-my-claudecode:executor` (Haiku simple, Sonnet standard)
    - Run independent tasks in parallel
 
 4. **Phase 3 - QA**: Cycle until all tests pass
