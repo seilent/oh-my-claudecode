@@ -7,6 +7,7 @@ export interface SkillRuntimeAvailability {
   grok: boolean;
   antigravity: boolean;
   opencode: boolean;
+  pi: boolean;
 }
 
 export function detectSkillRuntimeAvailability(
@@ -26,6 +27,7 @@ export function detectSkillRuntimeAvailability(
     grok: safeDetect('grok'),
     antigravity: safeDetect('antigravity'),
     opencode: safeDetect('opencode'),
+    pi: safeDetect('pi'),
   };
 }
 

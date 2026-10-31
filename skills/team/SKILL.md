@@ -48,7 +48,7 @@ The `swarm` compatibility alias was removed in #1131.
 
 Resolve the worker provider before any other step:
 
-1. `N:agent-type` names a CLI provider (`codex`, `gemini`, `antigravity`, `grok`, `cursor`, `opencode`): that provider.
+1. `N:agent-type` names a CLI provider (`codex`, `gemini`, `antigravity`, `grok`, `cursor`, `opencode`, `pi`): that provider.
 2. Otherwise read `team.ops.defaultAgentType` from `~/.config/claude-omc/config.jsonc` and `.claude/omc.jsonc` (project wins). Any value other than `claude` or unset: that provider.
 3. Otherwise `claude`: continue with the implicit Claude team below.
 
@@ -915,13 +915,13 @@ Optional settings live in `.claude/omc.jsonc` (project) or `~/.config/claude-omc
 ```
 
 - **ops.maxAgents** - Maximum teammates (default: 20)
-- **ops.defaultAgentType** - CLI provider when a `/team` invocation does not specify one (`claude` | `codex` | `gemini` | `antigravity` | `grok` | `cursor` | `opencode`, default: `claude`). A bare count or role-only spec (`2`, `2:executor`) uses it too.
+- **ops.defaultAgentType** - CLI provider when a `/team` invocation does not specify one (`claude` | `codex` | `gemini` | `antigravity` | `grok` | `cursor` | `opencode` | `pi`, default: `claude`). A bare count or role-only spec (`2`, `2:executor`) uses it too.
 - **ops.monitorIntervalMs** - How often to review TodoWrite or the active task-list surface (default: 30s)
 - **ops.shutdownTimeoutMs** - How long to wait for shutdown responses (default: 15s)
 
 > **Note:** Native Claude Code teammates do not have a hardcoded model default; each teammate inherits the lead session's configured model unless overridden per role. OMC's legacy CLI workers are separate processes: their provider and model come from OMC's team routing, not native teammate inheritance.
 >
-> **Nesting (Claude Code 2.1.217+):** Claude teammates are full, independent Claude Code sessions in the session's implicit team (see Phase 5). Do not assume a teammate can or cannot spawn nested subagents: Claude Code 2.1.217–2.1.218 defaulted `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 1, while 2.1.219+ defaults to 3, and the current setting controls subagent layers below the main conversation. Plan each teammate as the unit that does the work unless nested delegation is deliberate and supported by the active runtime. OMC CLI workers (`claude`, `codex`, `gemini`, `grok`, `cursor`, `antigravity`, and `opencode` via `ops.defaultAgentType`) are separate processes, not Claude Code subagents, and are unaffected by Claude's subagent depth setting.
+> **Nesting (Claude Code 2.1.217+):** Claude teammates are full, independent Claude Code sessions in the session's implicit team (see Phase 5). Do not assume a teammate can or cannot spawn nested subagents: Claude Code 2.1.217–2.1.218 defaulted `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 1, while 2.1.219+ defaults to 3, and the current setting controls subagent layers below the main conversation. Plan each teammate as the unit that does the work unless nested delegation is deliberate and supported by the active runtime. OMC CLI workers (`claude`, `codex`, `gemini`, `grok`, `cursor`, `antigravity`, `opencode`, and `pi` via `ops.defaultAgentType`) are separate processes, not Claude Code subagents, and are unaffected by Claude's subagent depth setting.
 >
 > **Concurrency:** The current OMC team CLI caps worker fan-out at 20 (`MAX_WORKER_COUNT`); although `ops.maxAgents` exists in the config schema, the current launcher does not consult it. Claude Code's `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` also defaults to 20, but that limit applies to Agent-spawned subagents; Claude Code documents agent-team teammates as following their own limits. Do not treat the two values as a shared cap or assume a full-size OMC team leaves exactly zero headroom for ordinary subagents; size OMC teams conservatively when the lead also needs Agent-spawned work.
 
@@ -929,7 +929,7 @@ Optional settings live in `.claude/omc.jsonc` (project) or `~/.config/claude-omc
 
 > **Scope:** Applies to `/team` only. Task-based delegation uses `delegationRouting` (see separate docs). The two systems coexist by design.
 
-Declare which provider (`claude`, `codex`, `gemini`, `antigravity`, `grok`, `cursor`, `opencode`) and which model tier should back each canonical role. Routing is resolved **once** at team creation and persisted in `TeamConfig.resolved_routing` — spawn, scale-up, and restart all read from the snapshot, so a role's worker CLI and model are stable for the lifetime of the team.
+Declare which provider (`claude`, `codex`, `gemini`, `antigravity`, `grok`, `cursor`, `opencode`, `pi`) and which model tier should back each canonical role. Routing is resolved **once** at team creation and persisted in `TeamConfig.resolved_routing` — spawn, scale-up, and restart all read from the snapshot, so a role's worker CLI and model are stable for the lifetime of the team.
 
 ### Example — user target mapping
 
@@ -970,7 +970,7 @@ User-friendly aliases normalize via `normalizeDelegationRole()` — e.g. `review
 
 ### Spec fields (`TeamRoleAssignmentSpec`)
 
-- **provider** — `"claude" | "codex" | "gemini" | "antigravity" | "grok" | "cursor" | "opencode"`. Omitted → defaults to `claude`.
+- **provider** — `"claude" | "codex" | "gemini" | "antigravity" | "grok" | "cursor" | "opencode" | "pi"`. Omitted → defaults to `claude`.
 - **model** — tier name (`"HIGH" | "MEDIUM" | "LOW"`) or an explicit model ID. Tiers resolve through `routing.tierModels`.
 - **agent** — optional Claude agent name (e.g. `"critic"`, `"executor"`). Only honored when the resolved provider is `claude`.
 

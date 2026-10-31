@@ -176,6 +176,13 @@ function agentTypeGuidance(agentType: CliAgentType, reviewerRole = false): strin
         '- If a command fails, report the exact stderr to leader-fixed before retrying.',
         `- You MUST run \`${claimTaskCommand}\` before starting work and \`${transitionTaskStatusCommand}\` when done.`,
       ].join('\n');
+    case 'pi':
+      return [
+        '### Agent-Type Guidance (pi)',
+        `- Prefer short, explicit \`${teamApiCommand} ... --json\` commands and parse outputs before next step.`,
+        '- If a command fails, report the exact stderr to leader-fixed before retrying.',
+        `- You MUST run \`${claimTaskCommand}\` before starting work and \`${transitionTaskStatusCommand}\` when done.`,
+      ].join('\n');
     case 'claude':
     default:
       return [

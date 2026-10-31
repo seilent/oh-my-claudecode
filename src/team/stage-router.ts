@@ -128,12 +128,12 @@ function resolveClaudeModel(
 /**
  * Resolve a user-supplied `model` value for an external provider worker.
  *
- * Tier names are Claude-centric and not meaningful for codex/gemini/grok/cursor/antigravity/opencode,
+ * Tier names are Claude-centric and not meaningful for codex/gemini/grok/cursor/antigravity/opencode/pi,
  * so tier input (or absent input) maps to the provider's builtin default. Only
  * an explicit non-tier model ID is passed through.
  */
 function resolveExternalModel(
-  provider: 'codex' | 'gemini' | 'grok' | 'cursor' | 'antigravity' | 'opencode',
+  provider: 'codex' | 'gemini' | 'grok' | 'cursor' | 'antigravity' | 'opencode' | 'pi',
   raw: string | undefined,
   cfg: PluginConfig,
 ): string {
@@ -160,6 +160,9 @@ function resolveExternalModel(
   }
   if (provider === 'opencode') {
     return model(defaults?.opencodeModel) ?? '';
+  }
+  if (provider === 'pi') {
+    return model(defaults?.piModel) ?? '';
   }
   return model(defaults?.geminiModel) ?? BUILTIN_EXTERNAL_MODEL_DEFAULTS.geminiModel;
 }

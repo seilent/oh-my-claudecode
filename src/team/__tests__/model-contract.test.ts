@@ -179,6 +179,12 @@ describe('model-contract', () => {
       expect(c.binary).toBe('opencode');
       expect(c.supportsPromptMode).toBe(true);
     });
+    it('returns contract for pi', () => {
+      const c = getContract('pi');
+      expect(c.agentType).toBe('pi');
+      expect(c.binary).toBe('pi');
+      expect(c.supportsPromptMode).toBe(true);
+    });
     it('returns contract for antigravity', () => {
       const c = getContract('antigravity');
       expect(c.agentType).toBe('antigravity');
@@ -406,6 +412,14 @@ describe('model-contract', () => {
       const withModel = buildLaunchArgs('opencode', { teamName: 't', workerName: 'w', cwd: '/tmp', model: 'opencode/big-pickle' });
       expect(withModel).toEqual(['run', '--auto', '--pure', '--model', 'opencode/big-pickle']);
       expect(getPromptModeArgs('opencode', 'do it')).toEqual(['do it']);
+    });
+    it('pi runs headless with -p --no-session and appends --model <m> when given', () => {
+      const noModel = buildLaunchArgs('pi', { teamName: 't', workerName: 'w', cwd: '/tmp' });
+      expect(noModel).toEqual(['-p', '--no-session']);
+
+      const withModel = buildLaunchArgs('pi', { teamName: 't', workerName: 'w', cwd: '/tmp', model: 'opencode-go/deepseek-v4.1-flash' });
+      expect(withModel).toEqual(['-p', '--no-session', '--model', 'opencode-go/deepseek-v4.1-flash']);
+      expect(getPromptModeArgs('pi', 'do it')).toEqual(['do it']);
     });
     it('cursor leads with --force --trust and appends --model <m> when given (issue #3880)', () => {
       const noModel = buildLaunchArgs('cursor', { teamName: 't', workerName: 'w', cwd: '/tmp' });

@@ -144,7 +144,7 @@ OMC exposes two different surfaces:
 | Feature                                        | Terminal CLI                                  | In-session skill                                                        | Notes                                                                                                                                |
 | ---------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | Setup                                          | `omc setup`                                   | `/omc-setup`                                                            | Both are real entrypoints.                                                                                                            |
-| Ask providers                                  | `omc ask codex "review this patch"`           | `/ask codex "review this patch"`                                        | Both route through the same advisor flow. Providers: `claude`, `codex`, `gemini`, `antigravity`, `grok`, `cursor`, `opencode`, `muse`.                                            |
+| Ask providers                                  | `omc ask codex "review this patch"`           | `/ask codex "review this patch"`                                        | Both route through the same advisor flow. Providers: `claude`, `codex`, `gemini`, `antigravity`, `grok`, `cursor`, `opencode`, `pi`, `muse`.                                            |
 | Team orchestration                             | `omc team 2:codex "review auth flow"`         | `/team 3:executor "fix all TypeScript errors"`                          | Both exist, but they are different runtimes: `omc team` launches tmux CLI workers; `/team` runs the in-session native team workflow. |
 | Pre-flight danger scan                         | `omc lookout scan --brief "..." [--json] [--strict]` | —                                                                | Advisory only: scans the task briefing and workspace before an unattended run and reports danger findings (findings/severity contract). Exit codes: 0 for successful non-strict scans (and strict scans without high-risk signals), 1 `--strict` with high-risk signals, 2 usage/scan error. |
 | Autopilot / Ralph / Execute / Deep Interview   | —                                             | `/autopilot ...`, `/ralph ...`, `/execute ...`, `/deep-interview ...`   | These are in-session skills. There is no `omc autopilot` / `omc ralph` / `omc execute` CLI subcommand in this repo.                  |
@@ -220,11 +220,12 @@ For mixed Codex + Antigravity work in one command, run `/ask codex` and `/ask an
 | `omc team N:antigravity "..."`  | N Antigravity (`agy`) panes   | UI/UX design, docs, large-context tasks                      |
 | `omc team N:grok "..."`         | N Grok Build CLI panes        | Code review, analysis cross-check            |
 | `omc team N:opencode "..."`    | N opencode CLI panes          | Any model opencode is configured for         |
+| `omc team N:pi "..."`          | N Pi CLI panes                | Any model Pi is configured for               |
 | `omc team N:cursor "..."`       | N Cursor agent panes          | Implementation and reviewer-style tasks      |
 | `omc team N:claude "..."`       | N Claude CLI panes            | General tasks via Claude CLI in tmux         |
 | `/ask codex` + `/ask antigravity` | Tri-model advisor synthesis | Mixed Codex + Antigravity review in one pass |
 
-Workers spawn on-demand and die when their task completes — no idle resource usage. Requires the selected CLI (`codex`, `gemini`, `agy` (antigravity), `grok`, `cursor-agent`, or `opencode`) installed/authenticated and an active tmux session.
+Workers spawn on-demand and die when their task completes — no idle resource usage. Requires the selected CLI (`codex`, `gemini`, `agy` (antigravity), `grok`, `cursor-agent`, `opencode`, or `pi`) installed/authenticated and an active tmux session.
 
 Autopilot can prefer Cursor executor workers during team execution via `.claude/omc.jsonc`:
 
@@ -305,7 +306,7 @@ Multiple strategies for different use cases — from Team-backed orchestration t
 | Mode                        | What it is                                                                              | Use For                                                                 |
 | --------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | **Team (recommended)**      | Canonical staged pipeline (`team-plan → team-prd → team-exec → team-verify → team-fix`) | Coordinated Claude agents on a shared task list                         |
-| **omc team (CLI)**          | tmux CLI workers — real `claude`/`codex`/`gemini`/`antigravity`/`grok`/`cursor-agent`/`opencode` processes in split-panes       | Codex/Gemini/Antigravity/Grok/Cursor CLI tasks; on-demand spawn, die when done             |
+| **omc team (CLI)**          | tmux CLI workers — real `claude`/`codex`/`gemini`/`antigravity`/`grok`/`cursor-agent`/`opencode`/`pi` processes in split-panes       | Codex/Gemini/Antigravity/Grok/Cursor CLI tasks; on-demand spawn, die when done             |
 | **Tri-model advisor (`/ask codex` + `/ask antigravity`)** | Claude synthesizes both advisors' output                                 | Mixed backend+UI work needing both Codex and Antigravity                     |
 | **Autopilot**               | Autonomous execution (single lead agent)                                                | End-to-end feature work with minimal ceremony                           |
 | **Execute**                 | Persistent execution with verify/fix loops, from plan to working code                   | Tasks that must complete fully (no silent partials)                     |
@@ -428,6 +429,7 @@ omc ask gemini --prompt "propose UI polish ideas"
 omc ask antigravity --prompt "propose UI polish ideas"
 omc ask grok --prompt "cross-check this code review"
 omc ask opencode --prompt "second opinion from another model"
+omc ask pi --prompt "second opinion from another model"
 omc ask cursor --prompt "apply this implementation plan"
 omc ask muse --agent-prompt critic --prompt "review this plan"
 omc ask claude --agent-prompt executor --prompt "draft implementation steps"

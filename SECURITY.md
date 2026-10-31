@@ -14,7 +14,7 @@ This enables:
 - Tool path restriction (AST tools confined to project root)
 - Python REPL sandbox (dangerous modules/builtins blocked)
 - Remote MCP server disable (Exa, Context7 not started)
-- External LLM disable (Codex, Gemini, Grok, opencode workers blocked in team mode)
+- External LLM disable (Codex, Gemini, Grok, opencode, pi workers blocked in team mode)
 - Auto-update disable (prevents unverified version installs)
 - Hard max iterations for persistent modes (200 cap)
 
@@ -71,9 +71,9 @@ Prevents Exa (web search) and Context7 (external documentation) MCP servers from
 
 ### External LLM Disable (`disableExternalLLM`)
 
-Blocks Codex (OpenAI), Gemini (Google), Grok (xAI, "Grok Build"), and opencode CLI workers from being spawned in team mode. Only Claude workers are allowed. Enforced at the `getContract()` level in the team worker contract system: any non-Claude provider throws `External LLM provider "<provider>" is blocked by security policy (disableExternalLLM)`. `OMC_SECURITY=strict` sets this on. Affects `omc team N:<provider>` and `omc ask <provider>` alike.
+Blocks Codex (OpenAI), Gemini (Google), Grok (xAI, "Grok Build"), opencode, and pi CLI workers from being spawned in team mode. Only Claude workers are allowed. Enforced at the `getContract()` level in the team worker contract system: any non-Claude provider throws `External LLM provider "<provider>" is blocked by security policy (disableExternalLLM)`. `OMC_SECURITY=strict` sets this on. Affects `omc team N:<provider>` and `omc ask <provider>` alike.
 
-> **Auto-approval risk class.** Headless CLI workers launch with auto-approve flags so they can run unattended: Codex uses `--dangerously-bypass-approvals-and-sandbox`, Gemini uses `--approval-mode yolo`, Grok uses `--always-approve`, and opencode uses `run --auto`. All four auto-approve the worker's own tool calls — treat them as the same risk class as Claude's `--dangerously-skip-permissions`. The resolved CLI binary path is checked against a trusted-prefix allowlist — `/usr/local/bin`, `/usr/bin`, `/opt/homebrew/`, `~/.local/bin`, `~/.nvm/`, `~/.cargo/bin`, and the Grok-specific `~/.grok/bin` (extend via `OMC_TRUSTED_CLI_DIRS`); the check is directory-boundary safe, so a sibling like `~/.grok/bin-evil` is not treated as trusted. A binary resolving outside the allowlist logs a security **warning** (advisory, not a hard block); only temp/shared-memory locations (`/tmp`, `/var/tmp`, `/dev/shm`) and relative paths are hard-rejected. Use `OMC_SECURITY=strict` (or `"disableExternalLLM": true`) to disable all external providers including Grok and opencode, in untrusted environments.
+> **Auto-approval risk class.** Headless CLI workers launch with auto-approve flags so they can run unattended: Codex uses `--dangerously-bypass-approvals-and-sandbox`, Gemini uses `--approval-mode yolo`, Grok uses `--always-approve`, opencode uses `run --auto`, and pi runs its tools without prompts. All five auto-approve the worker's own tool calls — treat them as the same risk class as Claude's `--dangerously-skip-permissions`. The resolved CLI binary path is checked against a trusted-prefix allowlist — `/usr/local/bin`, `/usr/bin`, `/opt/homebrew/`, `~/.local/bin`, `~/.nvm/`, `~/.cargo/bin`, and the Grok-specific `~/.grok/bin` (extend via `OMC_TRUSTED_CLI_DIRS`); the check is directory-boundary safe, so a sibling like `~/.grok/bin-evil` is not treated as trusted. A binary resolving outside the allowlist logs a security **warning** (advisory, not a hard block); only temp/shared-memory locations (`/tmp`, `/var/tmp`, `/dev/shm`) and relative paths are hard-rejected. Use `OMC_SECURITY=strict` (or `"disableExternalLLM": true`) to disable all external providers including Grok, opencode, and pi, in untrusted environments.
 
 ### Auto-Update Disable (`disableAutoUpdate`)
 

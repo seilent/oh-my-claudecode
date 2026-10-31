@@ -209,7 +209,7 @@ function isExplicitRalplanSlashInvocation(prompt) {
 }
 
 function isExplicitAskSlashInvocation(prompt) {
-  return /^\s*\/(?:oh-my-claudecode:)?ask\s+(?:claude|codex|gemini|antigravity|agy|grok|cursor|opencode|muse)\b/i.test(prompt);
+  return /^\s*\/(?:oh-my-claudecode:)?ask\s+(?:claude|codex|gemini|antigravity|agy|grok|cursor|opencode|pi|muse)\b/i.test(prompt);
 }
 
 function isRetiredSlashInvocation(prompt) {

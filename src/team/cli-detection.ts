@@ -304,5 +304,6 @@ export function detectAllClis(): Record<string, CliInfo> {
     grok: detectCli('grok'),
     antigravity: detectCli('agy'),
     opencode: detectCli('opencode'),
+    pi: detectCli('pi'),
   };
 }

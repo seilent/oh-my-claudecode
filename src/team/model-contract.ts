@@ -7,7 +7,7 @@ import { isExternalLLMDisabled } from '../lib/security-config.js';
 import type { WorkerLaunchDescriptor } from './types.js';
 import type { ExternalModelsDefaults } from '../shared/types.js';
 
-export type CliAgentType = 'claude' | 'codex' | 'gemini' | 'cursor' | 'grok' | 'antigravity' | 'opencode';
+export type CliAgentType = 'claude' | 'codex' | 'gemini' | 'cursor' | 'grok' | 'antigravity' | 'opencode' | 'pi';
 
 export interface CliAgentContract {
   agentType: CliAgentType;
@@ -305,6 +305,20 @@ const CONTRACTS: Record<CliAgentType, CliAgentContract> = {
     supportsPromptMode: true,
     buildLaunchArgs(model?: string, reasoningEffort?: string, extraFlags: string[] = []): string[] {
       const args = ['run', '--auto', '--pure'];
+      if (model) args.push('--model', model);
+      return [...args, ...extraFlags];
+    },
+    parseOutput(rawOutput: string): string {
+      return rawOutput.trim();
+    },
+  },
+  pi: {
+    agentType: 'pi',
+    binary: 'pi',
+    installInstructions: 'Install Pi: npm install -g @earendil-works/pi-coding-agent, then verify with `pi --version`.',
+    supportsPromptMode: true,
+    buildLaunchArgs(model?: string, reasoningEffort?: string, extraFlags: string[] = []): string[] {
+      const args = ['-p', '--no-session'];
       if (model) args.push('--model', model);
       return [...args, ...extraFlags];
     },
@@ -639,6 +653,7 @@ export function resolveDefaultWorkerModel(
     grok: 'grokModel',
     cursor: 'cursorModel',
     opencode: 'opencodeModel',
+    pi: 'piModel',
   };
   const configuredValue = defaults?.[providerConfigKeys[agentType]];
   const configured = typeof configuredValue === 'string' ? configuredValue.trim() : undefined;
@@ -660,7 +675,7 @@ export function resolveDefaultWorkerModel(
 export function normalizeExternalModelsDefaults(defaults?: ExternalModelsDefaults): ExternalModelsDefaults | undefined {
   if (!defaults || typeof defaults !== 'object') return undefined;
   const normalized: ExternalModelsDefaults = {};
-  for (const key of ['codexModel', 'geminiModel', 'grokModel', 'antigravityModel', 'cursorModel', 'opencodeModel'] as const) {
+  for (const key of ['codexModel', 'geminiModel', 'grokModel', 'antigravityModel', 'cursorModel', 'opencodeModel', 'piModel'] as const) {
     const value = defaults[key];
     if (typeof value === 'string' && value.trim()) normalized[key] = value.trim();
   }
@@ -679,6 +694,7 @@ export function resolveExternalModelsDefaults(
   for (const [provider, key] of [
     ['CODEX', 'codexModel'], ['GEMINI', 'geminiModel'], ['GROK', 'grokModel'],
     ['CURSOR', 'cursorModel'], ['ANTIGRAVITY', 'antigravityModel'], ['OPENCODE', 'opencodeModel'],
+    ['PI', 'piModel'],
   ] as const) {
     if (normalized[key]) continue;
     const value = [env[`OMC_EXTERNAL_MODELS_DEFAULT_${provider}_MODEL`], env[`OMC_${provider}_DEFAULT_MODEL`]]

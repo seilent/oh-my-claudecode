@@ -15,6 +15,7 @@ const PROVIDER_BINARIES = {
   grok: 'grok',
   cursor: 'cursor-agent',
   opencode: 'opencode',
+  pi: 'pi',
   muse: 'muse',
 };
 
@@ -62,6 +63,7 @@ const ANTIGRAVITY_TIMEOUT_MS = (() => {
  *   mode; grok's stdin is reserved for ACP JSON-RPC, never the prompt)
  * - cursor: `cursor-agent --print --force --trust --sandbox disabled <prompt>`
  * - opencode: `opencode run --auto -- <prompt>`
+ * - pi: `pi -p --no-session <prompt>`
  * - muse: `muse exec --prompt-file <file> --approval-mode never --user-input-auto-resolve`
  *   (headless; preserves Muse's configured sandbox behavior)
  */
@@ -90,6 +92,9 @@ function buildProviderArgs(provider, prompt, { pipePromptViaStdin = false, promp
   }
   if (provider === 'opencode') {
     return ['run', '--auto', '--', prompt];
+  }
+  if (provider === 'pi') {
+    return ['-p', '--no-session', prompt];
   }
   if (provider === 'cursor') {
     // Cursor Agent's print mode takes the prompt as a positional arg. Keep stdin
@@ -135,8 +140,8 @@ const ASK_ORIGINAL_TASK_ENV = 'OMC_ASK_ORIGINAL_TASK';
 const ASK_ORIGINAL_TASK_ENV_ALIAS = 'OMX_ASK_ORIGINAL_TASK';
 
 function usage() {
-  console.error('Usage: omc ask <claude|codex|gemini|antigravity|grok|cursor|opencode|muse> "<prompt>"');
-  console.error('Legacy direct usage: node scripts/run-provider-advisor.js <claude|codex|gemini|antigravity|grok|cursor|opencode|muse> <prompt...>');
+  console.error('Usage: omc ask <claude|codex|gemini|antigravity|grok|cursor|opencode|pi|muse> "<prompt>"');
+  console.error('Legacy direct usage: node scripts/run-provider-advisor.js <claude|codex|gemini|antigravity|grok|cursor|opencode|pi|muse> <prompt...>');
   console.error('                 or: node scripts/run-provider-advisor.js claude --print "<prompt>"');
   console.error('                 or: node scripts/run-provider-advisor.js gemini --prompt "<prompt>"');
 }

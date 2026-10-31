@@ -22,6 +22,7 @@ const DEFAULT_CAPABILITIES: Record<WorkerBackend, WorkerCapability[]> = {
   'tmux-grok': ['code-edit', 'code-review', 'refactoring', 'general'],
   'tmux-antigravity': ['ui-design', 'documentation', 'research', 'code-edit'],
   'tmux-opencode': ['code-edit', 'code-review', 'refactoring', 'general'],
+  'tmux-pi': ['code-edit', 'code-review', 'refactoring', 'general'],
 };
 
 /**
