@@ -32,6 +32,7 @@ function makeContext(overrides: Partial<HudRenderContext> = {}): HudRenderContex
     activeAgents: [],
     todos: [],
     backgroundTasks: [],
+    piRuns: [],
     cwd: '/tmp/test',
     lastSkill: null,
     rateLimitsResult: null,

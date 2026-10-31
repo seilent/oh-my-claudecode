@@ -18,6 +18,7 @@ import { renderTodosWithCurrent } from "./elements/todos.js";
 import { renderSkills, renderLastSkill } from "./elements/skills.js";
 import { renderContext, renderContextWithBar } from "./elements/context.js";
 import { renderBackground } from "./elements/background.js";
+import { renderPiRuns } from "./elements/pi-runs.js";
 import { renderPrd } from "./elements/prd.js";
 import {
   renderRateLimits,
@@ -514,6 +515,11 @@ export async function render(
   if (enabledElements.backgroundTasks) {
     const bg = renderBackground(context.backgroundTasks, hudLabels);
     if (bg) rendered.set("background", bg);
+  }
+
+  if (enabledElements.piRuns) {
+    const piRuns = renderPiRuns(context.piRuns, hudLabels);
+    if (piRuns) rendered.set("piRuns", piRuns);
   }
 
   const showCounts = enabledElements.showCallCounts ?? true;

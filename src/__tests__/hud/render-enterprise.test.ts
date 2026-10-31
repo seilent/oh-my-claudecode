@@ -33,6 +33,7 @@ function createContext(overrides: Partial<HudRenderContext> = {}): HudRenderCont
     activeAgents: [],
     todos: [],
     backgroundTasks: [],
+    piRuns: [],
     cwd: '/home/user/project',
     lastSkill: null,
     rateLimitsResult: null,

@@ -97,6 +97,7 @@ describe('mission board renderer', () => {
       activeAgents: [],
       todos: [{ content: 'keep shipping', status: 'in_progress' }],
       backgroundTasks: [],
+      piRuns: [],
       cwd: '/tmp/project',
       missionBoard: createMissionState(),
       lastSkill: null,

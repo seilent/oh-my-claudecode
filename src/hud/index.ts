@@ -37,6 +37,7 @@ import { detectApiKeySource } from "./elements/api-key-source.js";
 import { refreshMissionBoardState } from "./mission-board.js";
 import { sanitizeOutput } from "./sanitize.js";
 import { estimatePayloadFromTranscriptPath } from "./payload-estimate.js";
+import { readPiRuns } from "./pi-runs.js";
 import type {
   HudRenderContext,
   RateLimits,
@@ -523,6 +524,7 @@ async function mainImpl(watchMode = false, skipInit = false): Promise<void> {
       activeAgents: transcriptData.agents.filter((a) => a.status === "running"),
       todos: transcriptData.todos,
       backgroundTasks: getRunningTasks(hudState),
+      piRuns: readPiRuns(currentSessionId ?? null),
       cwd,
       missionBoard,
       lastSkill: transcriptData.lastActivatedSkill || null,

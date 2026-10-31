@@ -28,6 +28,7 @@ function baseContext(payloadBytes?: number): HudRenderContext {
     activeAgents: [],
     todos: [],
     backgroundTasks: [],
+    piRuns: [],
     cwd: "/tmp/project",
     lastSkill: null,
     rateLimitsResult: null,

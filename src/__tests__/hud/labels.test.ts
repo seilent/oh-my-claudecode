@@ -45,6 +45,7 @@ function createContext(): HudRenderContext {
     backgroundTasks: [
       { id: 'bg-1', description: 'task', startedAt: new Date().toISOString(), status: 'running' },
     ],
+    piRuns: [],
     cwd: '/home/user/project',
     lastSkill: null,
     rateLimitsResult: null,

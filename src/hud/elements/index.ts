@@ -10,6 +10,7 @@ export { renderTodos } from './todos.js';
 export { renderSkills, renderLastSkill } from './skills.js';
 export { renderContext } from './context.js';
 export { renderBackground } from './background.js';
+export { renderPiRuns } from './pi-runs.js';
 export { renderPrd } from './prd.js';
 export { renderRateLimits, renderRateLimitsCompact, renderRateLimitsWithBar } from './limits.js';
 export { renderPermission } from './permission.js';

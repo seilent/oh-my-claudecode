@@ -22,6 +22,7 @@ function createMinimalContext(overrides: Partial<HudRenderContext> = {}): HudRen
     activeAgents: [],
     todos: [],
     backgroundTasks: [],
+    piRuns: [],
     cwd: '/tmp/test',
     lastSkill: null,
     rateLimitsResult: null,

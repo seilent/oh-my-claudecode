@@ -8,6 +8,7 @@ import type { AutopilotStateForHud } from './elements/autopilot.js';
 import type { ApiKeySource } from './elements/api-key-source.js';
 import type { SessionSummaryState } from './elements/session-summary.js';
 import type { PayloadEstimate } from './payload-estimate.js';
+import type { PiRun } from './pi-runs.js';
 import type { MissionBoardConfig, MissionBoardState } from './mission-board.js';
 import { DEFAULT_MISSION_BOARD_CONFIG } from './mission-board.js';
 
@@ -405,6 +406,8 @@ export interface HudRenderContext {
   /** Background tasks from HUD state */
   backgroundTasks: BackgroundTask[];
 
+  piRuns: PiRun[];
+
   /** Working directory */
   cwd: string;
 
@@ -545,6 +548,7 @@ export interface HudLabels {
   skill: string;
   ralph: string;
   background: string;
+  pi: string;
   thinking: string;
   model: string;
   staged: string;
@@ -562,6 +566,7 @@ export const DEFAULT_HUD_LABELS: HudLabels = {
   skill: 'S',
   ralph: 'ralph',
   background: 'bg',
+  pi: 'pi',
   thinking: 'thinking',
   model: 'Model',
   staged: '+',
@@ -581,6 +586,7 @@ export const HUD_LOCALE_LABELS: Record<HudLocale, HudLabels> = {
     skill: '技能',
     ralph: '循环',
     background: '后台',
+    pi: 'pi',
     thinking: '思考',
     model: '模型',
     staged: '已暂存',
@@ -649,6 +655,7 @@ export interface HudElementConfig {
   agentsFormat: AgentsFormat;
   agentsMaxLines: number;  // Max agent detail lines for multiline format (default: 5)
   backgroundTasks: boolean;
+  piRuns: boolean;
   todos: boolean;
   permissionStatus: boolean;  // Show pending permission indicator
   thinking: boolean;          // Show extended thinking indicator
@@ -722,7 +729,7 @@ export const DEFAULT_ELEMENT_ORDER: Required<LayoutConfig> = {
     'omcLabel', 'model', 'effort', 'claudeLabel', 'enterpriseCost', 'rateLimits', 'customBuckets', 'permission', 'thinking',
     'promptTime', 'session', 'tokens', 'ralph', 'autopilot', 'prd',
     'skills', 'lastSkill', 'contextBar', 'agents', 'background',
-    'callCounts', 'lastTool', 'sessionSummary',
+    'piRuns', 'callCounts', 'lastTool', 'sessionSummary',
   ],
   detail: ['missionBoard', 'agents', 'contextWarning', 'payloadWarning', 'updateHint', 'todos'],
 };
@@ -782,6 +789,7 @@ export const DEFAULT_HUD_CONFIG: HudConfig = {
     agentsFormat: 'multiline', // Multi-line for rich agent visualization
     agentsMaxLines: 5, // Show up to 5 agent detail lines
     backgroundTasks: true,
+    piRuns: true,
     todos: true,
     lastSkill: true,
     permissionStatus: false,  // Disabled: heuristic-based, causes false positives
@@ -845,6 +853,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     agentsFormat: 'count',
     agentsMaxLines: 0,
     backgroundTasks: false,
+    piRuns: false,
     todos: true,
     permissionStatus: false,
     thinking: false,
@@ -889,6 +898,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     agentsFormat: 'multiline',
     agentsMaxLines: 3,
     backgroundTasks: true,
+    piRuns: true,
     todos: true,
     permissionStatus: false,
     thinking: true,
@@ -933,6 +943,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     agentsFormat: 'multiline',
     agentsMaxLines: 10,
     backgroundTasks: true,
+    piRuns: true,
     todos: true,
     permissionStatus: false,
     thinking: true,
@@ -977,6 +988,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     agentsFormat: 'codes',
     agentsMaxLines: 0,
     backgroundTasks: false,
+    piRuns: false,
     todos: true,
     permissionStatus: false,
     thinking: true,
@@ -1021,6 +1033,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     agentsFormat: 'multiline',
     agentsMaxLines: 5,
     backgroundTasks: true,
+    piRuns: true,
     todos: true,
     permissionStatus: false,
     thinking: true,
