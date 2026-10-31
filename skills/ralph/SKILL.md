@@ -156,7 +156,7 @@ Rules:
 7. **Reviewer verification** (tiered, against acceptance criteria):
    - <5 files, <100 lines with full tests: STANDARD tier minimum (architect with model="sonnet")
    - Standard changes: STANDARD tier (architect with model="sonnet")
-   - > 20 files or security/architectural changes: THOROUGH tier (architect with model="opus")
+   - > 20 files or security/architectural changes: THOROUGH tier (architect with model="sonnet")
    - If `--critic=critic`, use the Claude `critic` agent for the approval pass
    - If `--critic=codex`, run `omc ask codex --agent-prompt critic "..."` for the approval pass. The Codex critic prompt MUST include:
      1. The full list of acceptance criteria from prd.json for verification
@@ -223,7 +223,7 @@ Correct parallel delegation:
 
 Task(subagent_type="oh-my-claudecode:executor", model="haiku", prompt="Add type export for UserConfig")
 Task(subagent_type="oh-my-claudecode:executor", model="sonnet", prompt="Implement the caching layer for API responses")
-Task(subagent_type="oh-my-claudecode:executor", model="opus", prompt="Refactor auth module to support OAuth2 flow")
+Task(subagent_type="oh-my-claudecode:executor", model="sonnet", prompt="Refactor auth module to support OAuth2 flow")
 
 ```
 Why good: Three independent tasks fired simultaneously at appropriate tiers.
