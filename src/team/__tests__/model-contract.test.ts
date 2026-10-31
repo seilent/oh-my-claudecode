@@ -401,10 +401,10 @@ describe('model-contract', () => {
     });
     it('opencode runs headless with --auto and appends --model <m> when given', () => {
       const noModel = buildLaunchArgs('opencode', { teamName: 't', workerName: 'w', cwd: '/tmp' });
-      expect(noModel).toEqual(['run', '--auto']);
+      expect(noModel).toEqual(['run', '--auto', '--pure']);
 
       const withModel = buildLaunchArgs('opencode', { teamName: 't', workerName: 'w', cwd: '/tmp', model: 'opencode/big-pickle' });
-      expect(withModel).toEqual(['run', '--auto', '--model', 'opencode/big-pickle']);
+      expect(withModel).toEqual(['run', '--auto', '--pure', '--model', 'opencode/big-pickle']);
       expect(getPromptModeArgs('opencode', 'do it')).toEqual(['do it']);
     });
     it('cursor leads with --force --trust and appends --model <m> when given (issue #3880)', () => {

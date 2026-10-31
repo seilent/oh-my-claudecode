@@ -304,7 +304,7 @@ const CONTRACTS: Record<CliAgentType, CliAgentContract> = {
     installInstructions: 'Install opencode: https://opencode.ai, then verify with `opencode --version`.',
     supportsPromptMode: true,
     buildLaunchArgs(model?: string, reasoningEffort?: string, extraFlags: string[] = []): string[] {
-      const args = ['run', '--auto'];
+      const args = ['run', '--auto', '--pure'];
       if (model) args.push('--model', model);
       return [...args, ...extraFlags];
     },
